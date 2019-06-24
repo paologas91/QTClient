@@ -66,4 +66,4 @@
  }*/
 
  // Define the main class for the application
- mainClassName = 'MainTest.java'
+ mainClassName = 'Client'
