@@ -129,6 +129,8 @@ public class Client {
 		String ip = args[0];
 		int port = Integer.parseInt(args[1]);
 		Client main = null;
+		String on="";
+		
 		do {
 			try {
 				main = new Client(ip, port);
@@ -224,7 +226,11 @@ public class Client {
 				} while (true);
 				main.stop();
 			}
-			System.out.println("Vuoi riprovare?");
-		}while(Keyboard.readString().equals("y"));
+			
+			if(main==null) {
+				System.out.println("Vuoi riprovare?");
+				on=Keyboard.readString();
+			}
+		}while(main==null && on.equals("y"));
 	}
 }
