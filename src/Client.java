@@ -14,8 +14,8 @@ public class Client {
 	/**
 	 * @param args
 	 */
+	private ObjectInputStream in;
 	private ObjectOutputStream out;
-	private ObjectInputStream in; // stream con richieste del client
 
 	public Client(final String ip, final int port) throws IOException {
 		InetAddress addr = InetAddress.getByName(ip); 
@@ -23,8 +23,8 @@ public class Client {
 		Socket socket = new Socket(addr, port); 
 		System.out.println(socket);
 
-		out = new ObjectOutputStream(socket.getOutputStream());
 		in = new ObjectInputStream(socket.getInputStream());
+		out = new ObjectOutputStream(socket.getOutputStream());
 	}
 
 	private int menu() {
@@ -50,7 +50,7 @@ public class Client {
 		System.out.print("Radius:");
 		r = Keyboard.readDouble();
 		while (r <= 0) {
-			System.out.println("Inserire un raggio maggiore di 0");
+			System.out.println("Insert a radius greater than 0");
 			System.out.print("Radius:");
 			r = Keyboard.readDouble();
 		}
@@ -59,7 +59,7 @@ public class Client {
 		if (result.equals(OK)) {
 			return (String) in.readObject();
 		} else if (result.equals("filenotfound")) {
-			throw new ServerException("Il file selezionato non esiste");
+			throw new ServerException("The selected file does not exists");
 		} else {
 			throw new ServerException(result);
 		}
@@ -73,8 +73,8 @@ public class Client {
 		out.writeObject(tabName);
 		String result = (String) in.readObject();
 		if (result.equals("empty")) {
-			throw new ServerException("La tabella selezionata è vuota");
-		} else {
+			throw new ServerException("The selected table is empty");
+		} else if (!result.equals(OK)) {
 			throw new ServerException(result);
 		}
 
@@ -88,7 +88,7 @@ public class Client {
 		System.out.print("Radius:");
 		r = Keyboard.readDouble();
 		while (r <= 0) {
-			System.out.println("Inserire un raggio maggiore di 0");
+			System.out.println("Insert a radius greater than 0");
 			System.out.print("Radius:");
 			r = Keyboard.readDouble();
 		}
@@ -98,9 +98,9 @@ public class Client {
 			System.out.println("Number of Clusters:" + in.readObject());
 			return (String) in.readObject();
 		} else if (result.equals("empty")) {
-			throw new ServerException("La tabella selezionata è vuota");
+			throw new ServerException("The selected table is empty");
 		} else if (result.equals("full")) {
-			throw new ServerException("Il raggio è troppo grande");
+			throw new ServerException("The radious is too big");
 		} else {
 			throw new ServerException(result);
 		}
@@ -115,6 +115,14 @@ public class Client {
 			throw new ServerException(result);
 		}
 
+	}
+
+	private void stop() {
+		try {
+			out.writeObject(5);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(final String[] args) {
@@ -213,5 +221,6 @@ public class Client {
 				break;
 			}
 		} while (true);
+		main.stop();
 	}
 }
