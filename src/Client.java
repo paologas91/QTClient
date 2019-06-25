@@ -18,13 +18,13 @@ public class Client {
 	private ObjectInputStream in; // stream con richieste del client
 
 	public Client(final String ip, final int port) throws IOException {
-		InetAddress addr = InetAddress.getByName("192.168.1.8"); // ip
+		InetAddress addr = InetAddress.getByName(ip); 
 		System.out.println("addr = " + addr);
-		Socket socket = new Socket(addr, port); // Port
+		Socket socket = new Socket(addr, port); 
 		System.out.println(socket);
 
 		out = new ObjectOutputStream(socket.getOutputStream());
-		in = new ObjectInputStream(socket.getInputStream()); // stream con richieste del client
+		in = new ObjectInputStream(socket.getInputStream());
 	}
 
 	private int menu() {
@@ -119,7 +119,7 @@ public class Client {
 
 	public static void main(final String[] args) {
 		String ip = args[0];
-		int port = new Integer(args[1]).intValue();
+		int port = Integer.parseInt(args[1]);
 		Client main = null;
 		try {
 			main = new Client(ip, port);
@@ -151,12 +151,12 @@ public class Client {
 						System.out.println(e.getMessage());
 					}
 					break;
-				case 2: // learning from db
+				case 2:
 
 					while (true) {
 						try {
 							main.storeTableFromDb();
-							break; // esce fuori dal while
+							break;
 						}
 
 						catch (SocketException e) {
@@ -175,10 +175,9 @@ public class Client {
 						} catch (ServerException e) {
 							System.out.println(e.getMessage());
 						}
-					} // end while [viene fuori dal while con un db (in alternativa il programma
-						// termina)
+					} 
 
-					char answer = 'y';// itera per learning al variare di k
+					char answer = 'y';
 					do {
 						try {
 							String clusterSet = main.learningFromDbTable();
@@ -204,7 +203,7 @@ public class Client {
 						System.out.print("Would you repeat?(y/n)");
 						answer = Keyboard.readChar();
 					} while (Character.toLowerCase(answer) == 'y');
-					break; // fine case 2
+					break;
 				default:
 					System.out.println("Invalid option!");
 			}
