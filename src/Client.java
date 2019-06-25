@@ -19,7 +19,7 @@ public class Client {
 
 	public Client(final String ip, final int port) throws IOException {
 		InetAddress addr = InetAddress.getByName(ip); 
-		System.out.println("addr = " + addr);
+		System.out.println("addr = " + addr + " port = " + port);
 		Socket socket = new Socket(addr, port); 
 		System.out.println(socket);
 
@@ -129,98 +129,102 @@ public class Client {
 		String ip = args[0];
 		int port = Integer.parseInt(args[1]);
 		Client main = null;
-		try {
-			main = new Client(ip, port);
-		} catch (IOException e) {
-			System.out.println(e);
-			return;
-		}
-
 		do {
-			int menuAnswer = main.menu();
-			switch (menuAnswer) {
-				case 1:
-					try {
-						String kmeans = main.learningFromFile();
-						System.out.println(kmeans);
-					} catch (SocketException e) {
-						System.out.println(e);
-						return;
-					} catch (FileNotFoundException e) {
-						System.out.println(e);
-						return;
-					} catch (IOException e) {
-						System.out.println(e);
-						return;
-					} catch (ClassNotFoundException e) {
-						System.out.println(e);
-						return;
-					} catch (ServerException e) {
-						System.out.println(e.getMessage());
-					}
-					break;
-				case 2:
-
-					while (true) {
-						try {
-							main.storeTableFromDb();
+			try {
+				main = new Client(ip, port);
+			} catch (IOException e) {
+				System.out.println("connessione fallita");
+			}
+	
+			if (main!=null) {
+				do {
+					int menuAnswer = main.menu();
+					switch (menuAnswer) {
+						case 1:
+							try {
+								String kmeans = main.learningFromFile();
+								System.out.println(kmeans);
+							} catch (SocketException e) {
+								System.out.println(e);
+								return;
+							} catch (FileNotFoundException e) {
+								System.out.println(e);
+								return;
+							} catch (IOException e) {
+								System.out.println(e);
+								return;
+							} catch (ClassNotFoundException e) {
+								System.out.println(e);
+								return;
+							} catch (ServerException e) {
+								System.out.println(e.getMessage());
+							}
 							break;
-						}
-
-						catch (SocketException e) {
-							System.out.println(e);
-							return;
-						} catch (FileNotFoundException e) {
-							System.out.println(e);
-							return;
-
-						} catch (IOException e) {
-							System.out.println(e);
-							return;
-						} catch (ClassNotFoundException e) {
-							System.out.println(e);
-							return;
-						} catch (ServerException e) {
-							System.out.println(e.getMessage());
-						}
-					} 
-
-					char answer = 'y';
-					do {
-						try {
-							String clusterSet = main.learningFromDbTable();
-							System.out.println(clusterSet);
-
-							main.storeClusterInFile();
-
-						} catch (SocketException e) {
-							System.out.println(e);
-							return;
-						} catch (FileNotFoundException e) {
-							System.out.println(e);
-							return;
-						} catch (ClassNotFoundException e) {
-							System.out.println(e);
-							return;
-						} catch (IOException e) {
-							System.out.println(e);
-							return;
-						} catch (ServerException e) {
-							System.out.println(e.getMessage());
-						}
-						System.out.print("Would you repeat?(y/n)");
-						answer = Keyboard.readChar();
-					} while (Character.toLowerCase(answer) == 'y');
-					break;
-				default:
-					System.out.println("Invalid option!");
+						case 2:
+		
+							while (true) {
+								try {
+									main.storeTableFromDb();
+									break;
+								}
+		
+								catch (SocketException e) {
+									System.out.println(e);
+									return;
+								} catch (FileNotFoundException e) {
+									System.out.println(e);
+									return;
+		
+								} catch (IOException e) {
+									System.out.println(e);
+									return;
+								} catch (ClassNotFoundException e) {
+									System.out.println(e);
+									return;
+								} catch (ServerException e) {
+									System.out.println(e.getMessage());
+								}
+							} 
+		
+							char answer = 'y';
+							do {
+								try {
+									String clusterSet = main.learningFromDbTable();
+									System.out.println(clusterSet);
+		
+									main.storeClusterInFile();
+		
+								} catch (SocketException e) {
+									System.out.println(e);
+									return;
+								} catch (FileNotFoundException e) {
+									System.out.println(e);
+									return;
+								} catch (ClassNotFoundException e) {
+									System.out.println(e);
+									return;
+								} catch (IOException e) {
+									System.out.println(e);
+									return;
+								} catch (ServerException e) {
+									System.out.println(e.getMessage());
+								}
+								System.out.print("Would you repeat?(y/n)");
+								answer = Keyboard.readChar();
+							} while (Character.toLowerCase(answer) == 'y');
+							break;
+						default:
+							System.out.println("Invalid option!");
+					}
+		
+					System.out.print("would you choose a new operation from menu?(y/n)");
+					if (Keyboard.readChar() != 'y') {
+						break;
+					}
+				} while (true);
+				main.stop();
 			}
-
-			System.out.print("would you choose a new operation from menu?(y/n)");
-			if (Keyboard.readChar() != 'y') {
-				break;
-			}
-		} while (true);
-		main.stop();
+			System.out.println("Vuoi riprovare?");
+		}while(Keyboard.readString().equals("y"));
 	}
 }
