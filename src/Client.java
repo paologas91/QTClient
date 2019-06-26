@@ -74,6 +74,8 @@ public class Client {
 		String result = (String) in.readObject();
 		if (result.equals("empty")) {
 			throw new ServerException("The selected table is empty");
+		} else if (result.equals("notFound")) {
+			throw new ServerException("The selected table does not exists");
 		} else if (!result.equals(OK)) {
 			throw new ServerException(result);
 		}
