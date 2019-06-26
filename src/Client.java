@@ -128,6 +128,10 @@ public class Client {
 	public static void main(final String[] args) {
 		String ip = args[0];
 		int port = Integer.parseInt(args[1]);
+		if (port < 1024 || port > 65535) {
+			System.err.println("porta non valida");
+			return;
+		}
 		Client main = null;
 		String on="";
 		
