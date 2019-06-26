@@ -228,7 +228,7 @@ public class Client {
 			}
 			
 			if(main==null) {
-				System.out.println("Vuoi riprovare?");
+				System.out.println("Vuoi riprovare?(y/n)");
 				on=Keyboard.readString();
 			}
 		}while(main==null && on.equals("y"));
